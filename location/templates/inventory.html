@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>OMOADS</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <!-- <link rel="stylesheet" type="text/css" href="md.css"> -->
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <style type="text/css">
+      /* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+#map {
+  height: 100%;
+  background-color: grey;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.key {
+  color: #222221;
+  font-family: "Univers LT W01 65 Bold", "Helvetica", "Arial", sans-serif;
+  font-size: 1.25em;
+  font-weight: bold;
+  vertical-align: text-top;
+  white-space: nowrap;
+}
+
+.value {
+  color: black;
+  font-family: "Univers LT W01 55 Roman", "Helvetica", "Arial", sans-serif;
+  font-size: 1em;
+  padding: 4px 15px;
+}
+
+.map-div {
+  height: 350px;
+  width: 100%;
+}
+
+ </style>
+  </head>
+
+  <body>
+    
+   
+    <p> Hi </p> 
+    <button  onclick="request_access(this)" id="{{ data }}"> Join Group</button>
+
+
+  <div class="container-fluid">
+    <div class="text-center">
+      <h1 class="text-center"><a href="http://omoads.com">OMO ADS</a></h1>
+    </div>
+    <!--<div class="row">
+      <div class="col-sm-12">
+        <article class="text-center markdown-body">
+          <h3>The new way to advertise your products and services</h3>
+          <p>Some of the many advantages of OMOADS</p>
+          <ul class="text-center">
+            <li>Faster process for <em>advertiser</em> as well as <em>site owner</em></li>
+            <li>Reasonable transparent rates for the <em>advertiser</em></li>
+            <li>Greater market reach</li>
+            <li>Increased sales</li>
+          </ul>
+        </article>
+       </div> 
+    </div>-->
+     <div class="row">
+      <div class="map-div col-sm-6">
+        <h3 class="text-center">Available Sites for You</h3>
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+    <script>
+    
+      var map;
+   
+
+      
+
+      /*var locations =[ {lat: 28.6781724, lng: 77.4797189},
+                          {lat: 28.6768652, lng: 77.4728990},
+                          {lat: 28.6763763, lng: 77.4701303},
+                          {lat: 28.6751197, lng: 77.4616995},
+                          {lat: 28.6738951, lng: 77.4538242},
+                          {lat: 28.6733842, lng: 77.4505217},
+                          {lat: 28.6732274, lng: 77.4494545},
+                          {lat: 28.6729273, lng: 77.4475448},
+                          {lat: 28.6724676, lng: 77.4446125},
+                          {lat: 28.6723802, lng: 77.4440012},
+                          {lat: 28.6721128, lng: 77.4427765},
+                          {lat: 28.6720302, lng: 77.4416493},
+                          {lat: 28.6712003, lng: 77.4364093},
+                          {lat: 28.670961, lng: 77.435440},
+                          {lat: 28.670700, lng: 77.433446},
+                          {lat: 28.6695753, lng: 77.4265709},
+                          {lat: 28.6696836, lng: 77.4265555},
+                          {lat: 28.675449, lng: 77.442604},
+                          {lat: 28.6740381, lng: 77.4429414},
+                          {lat: 28.6737754, lng: 77.4429827},
+                          {lat: 28.6732445, lng: 77.4430802}
+                          ];*/
+
+   
+   /* //var json = {{locs}}.replace(/&quot;/g,"\"")       
+    //console.log("{{locs}}");
+    //            
+        /*var i =0;                  
+       {% for loc in locs %}
+       var locations[i] = [ {lat: loc.lat, lng: loc.lon}];
+       i++;
+       {% endfor %}     
+       console.log(locations)
+       <p> Hi </p> */
+       
+    /*{% for loc in locs %}
+      console.log("{{ loc.lat }}")
+      console.log("{{ loc.lon }}")
+    {% endfor %}  
+       var data = "{{ locs  }}".replace(/&quot;/g,"\"")
+       <p>data[0].lat</p>
+       
+       console.log(data[0].lat);
+       */
+    
+       function request_access($this){
+    console.log("button clicked");
+    var request_data = $this.locs;
+    console.log("data: " + request_data);
+    $.ajax({
+
+        url: "request_access/",
+        data : { request_data: request_data},
+        success : function(json) {
+            $("#request-access").hide();
+            console.log("requested access complete");
+        }
+    })
+}
+
+
+
+
+    var locations = [];
+    {% for loc in locs %}
+    locations.push({
+        lat: {{ loc.lat }},
+        lng: {{ loc.lon }},
+        
+    });
+    {% endfor %}
+
+
+
+
+
+
+        function initMap() {
+        //console.log(6);
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: locations[0],
+          zoom: 12
+        });
+
+        var markerGroup = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            map: map,
+            title: "OMOADS Site",
+            // icon: "../resources/images/marker3.png"
+          });
+        });
+
+        // var marker = new google.maps.Marker({
+        //   position: locations[0],
+        //   map: map,                     // required
+        //   //label: "Big Poster"
+        //   });
+
+        var markerCluster = new MarkerClusterer(map, markerGroup,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+        
+
+        for (var i = 0; i < locations.length; i++) {
+          google.maps.event.addListener(markerGroup[i], 'click', function() {
+            // infowindow.setContent(this.content);
+            // infowindow.open(map, this);
+            // console.log("hey popups!");
+            $('#myModal').modal('show');
+          });
+        }
+      }
+    </script>
+
+    <!-- Modal starts its magic -->
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h3 class="text-center modal-title" id="myModalLabel">More Details about the OMO site</h3>
+          </div>
+          <div class="modal-body">
+            
+
+
+
+          <!-- the content -->
+
+          <img class="img img-responsive" src="../resources/images/banner3.jpg" />
+          <table>
+            <tbody>
+              <tr>
+                <td class="key">Panel Id:</td>
+                  <td class="value">1304</td>
+              </tr>
+              <tr class="even">
+                <td class="key">Price:</td>
+                  <td class="value">INR 17500</td>
+              </tr>
+              <tr>
+                <td class="key">Location:</td>
+                <td class="value">Kavi Nagar</td>
+              </tr>
+              <tr class="even">
+                <td class="key">Lat/Long:</td>
+                <td class="value">28.674377 / 77.455472 </td>
+              </tr>
+              <tr>
+                <td class="key">Dimensions:</td>
+                <td class="value">10'6" x 22'9"</td>
+              </tr>
+              <tr class="even">
+                <td class="key">Restrictions:</td>
+                <td class="value">55 - Other,<br> 24 - Beverages - Liquors and Cordials</td>
+              </tr>
+            </tbody>
+          </table>
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Book Now</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="container-fluid text-center">
+      <!-- <a href="#myPage" title="To Top"> -->
+        <!-- <span class="glyphicon glyphicon-chevron-up"></span> -->
+      </a>
+      <p>© 2017  <a href="http://www.omoads.com" title="Visit OMOADS">OMOADS</a></p>
+    </footer>
+
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzoYSoBoClc5AXB5peOD3X8k-OdMXky3E&callback=initMap"
+    async defer></script>
+  
+  </div>
+  </body>
+</html>
+
